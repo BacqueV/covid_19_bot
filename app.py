@@ -7,16 +7,16 @@ from utils.set_bot_commands import set_default_commands
 
 
 async def on_startup(dispatcher):
-    # Birlamchi komandalar (/start va /help)
+    # initial commands (start & help)
     await set_default_commands(dispatcher)
 
-    # Ma'lumotlar bazasini yaratamiz:
+    # creating db:
     try:
         db.create_table_users()
     except Exception as err:
         print(err)
 
-    # Bot ishga tushgani haqida adminga xabar berish
+    # Informing admins about started polling
     await on_startup_notify(dispatcher)
 
 

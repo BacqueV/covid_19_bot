@@ -10,16 +10,16 @@ from loader import dp, db, bot
 @dp.message_handler(CommandStart())
 async def bot_start(message: types.Message):
     name = message.from_user.full_name
-    # Foydalanuvchini bazaga qo'shamiz
+    # adding user into db
     try:
         db.add_user(id=message.from_user.id,
                     name=name)
-        await message.answer(f"Xush kelibsiz! {name}")
-        # Adminga xabar beramiz
+        await message.answer(f"Welcome! {name}. Send me name of some country")
+        # Informing admins
         count = db.count_users()[0]
-        msg = f"{message.from_user.full_name} bazaga qo'shildi.\nBazada {count} ta foydalanuvchi bor."
+        msg = f"{message.from_user.full_name} joined into db.\nThere are {count} users in db."
         await bot.send_message(chat_id=ADMINS[0], text=msg)
 
     except sqlite3.IntegrityError as err:
-        await bot.send_message(chat_id=ADMINS[0], text=f"{name} bazaga oldin qo'shilgan")
-        await message.answer(f"Xush kelibsiz! {name}")
+        await bot.send_message(chat_id=ADMINS[0], text=f"{name} is already in db")
+        await message.answer(f"Welcome! {name}")
